@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -79,6 +80,31 @@ func TestHeap_String(t *testing.T) {
 		h.Add(7)
 		if h.String() != "[7,5,]" {
 			fmt.Println(h.String())
+			t.Fail()
+		}
+	})
+}
+
+func TestHeap(t *testing.T) {
+	t.Run("sort array", func(t *testing.T) {
+		input := []int{10, 0, -13, 99, 20, 15, 34, -29, 30, 40}
+		h := NewHeap()
+		for _, v := range input {
+			h.Add(v)
+		}
+		prev := math.MinInt32
+		var output []int
+		for i := 0; i < len(input); i++ {
+			v, ok := h.Pop()
+			if v < prev || ok != nil {
+				t.Fail()
+			}
+			output = append(output, v)
+		}
+		if len(h.array) > 0 {
+			t.Fail()
+		}
+		if fmt.Sprintf("%v",output) != "[99 40 34 30 20 15 10 0 -13 -29]" {
 			t.Fail()
 		}
 	})
