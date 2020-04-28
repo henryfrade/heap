@@ -5,7 +5,11 @@ import (
 	"fmt"
 )
 func main() {
+	input := []int{10, 0, -13, 99, 20, 15, 34, -29, 30, 40}
 	h := NewHeap()
+	for _, v := range input {
+		h.Add(v)
+	}
 }
 
 type heap struct {
