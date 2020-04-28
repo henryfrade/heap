@@ -3,13 +3,27 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
+
 func main() {
 	input := []int{10, 0, -13, 99, 20, 15, 34, -29, 30, 40}
+	var output []int
 	h := NewHeap()
 	for _, v := range input {
 		h.Add(v)
 	}
+
+	for {
+		i, ok := h.Pop()
+		fmt.Println(fmt.Sprintf("Pop %v (err: %v): [%s]", i, ok, h.String()))
+		output = append(output, i)
+		if ok != nil {
+			break
+		}
+	}
+
+	fmt.Println(output)
 }
 
 type heap struct {
@@ -35,6 +49,52 @@ func (h *heap) Add(i int) {
 		}
 		curr = papa
 	}
+}
+
+func (h *heap) Pop() (int, error) {
+	if len(h.array) == 0 {
+		return 0, errors.New("heap is empty")
+	}
+
+	top := h.array[0]
+	newLength := len(h.array) - 1
+	h.array[0] = h.array[newLength]
+	h.array = h.array[:newLength]
+	if len(h.array) == 0 {
+		return top, nil
+	}
+
+	for cI := 0; cI < len(h.array); {
+		curr := h.array[cI]
+		maxI, ok := h.maxChildIndex(cI)
+		if ok != nil {
+			break
+		}
+		maxChild := h.array[maxI]
+		if maxChild <= curr {
+			break
+		}
+		h.array[cI] = maxChild
+		h.array[maxI] = curr
+		cI = maxI
+	}
+	return top, nil
+}
+
+func (h *heap) maxChildIndex(parentIndex int) (maxI int, err error) {
+	li := parentIndex*2 + 1
+	ri := li + 1
+	if li >= len(h.array) {
+		return 0, errors.New("no children")
+	}
+	maxI = li
+	if ri < len(h.array) {
+		right := h.array[ri]
+		if right > h.array[maxI] {
+			maxI = ri
+		}
+	}
+	return
 }
 
 func (h *heap) String() string {

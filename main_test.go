@@ -35,6 +35,28 @@ func TestHeap_Add(t *testing.T) {
 		}
 	})
 }
+
+func TestHeap_Pop(t *testing.T) {
+	t.Run("empty heap", func(t *testing.T) {
+		h := NewHeap()
+		_, ok := h.Pop()
+		if ok == nil {
+			t.Fail()
+		}
+	})
+	t.Run("single element", func(t *testing.T) {
+		h := NewHeap()
+		h.Add(5)
+		if len(h.array) != 1 {
+			t.Fail()
+		}
+		v, ok := h.Pop()
+		if v != 5 || ok != nil {
+			t.Fail()
+		}
+	})
+}
+
 func TestHeap_String(t *testing.T) {
 	t.Run("Empty Heap", func(t *testing.T) {
 		h := NewHeap()
