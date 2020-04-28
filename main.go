@@ -37,3 +37,13 @@ func (h *heap) Add(i int) {
 	}
 }
 
+func (h *heap) String() string {
+	var buffer strings.Builder
+	buffer.Grow(len(h.array) * 2 + 2)
+	buffer.WriteString("[")
+	for _, v := range h.array {
+		buffer.WriteString(fmt.Sprintf("%v,", v))
+	}
+	buffer.WriteString("]")
+	return buffer.String()
+}

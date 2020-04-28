@@ -35,3 +35,29 @@ func TestHeap_Add(t *testing.T) {
 		}
 	})
 }
+func TestHeap_String(t *testing.T) {
+	t.Run("Empty Heap", func(t *testing.T) {
+		h := NewHeap()
+		if h.String() != "[]" {
+			t.Fail()
+		}
+	})
+
+	t.Run("One element", func(t *testing.T) {
+		h := NewHeap()
+		h.Add(5)
+		if h.String() != "[5,]" {
+			t.Fail()
+		}
+	})
+
+	t.Run("A few elements", func(t *testing.T) {
+		h := NewHeap()
+		h.Add(5)
+		h.Add(7)
+		if h.String() != "[7,5,]" {
+			fmt.Println(h.String())
+			t.Fail()
+		}
+	})
+}
